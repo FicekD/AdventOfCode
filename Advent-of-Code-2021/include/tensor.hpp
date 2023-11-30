@@ -20,13 +20,9 @@ namespace tensor {
             std::fill(_data.begin(), _data.end(), value);
         }
 
-        size_t size() {
+        size_t size() const {
             return _data.size();
         }
-
-        uint x_size() const { return _xdim; }
-        uint y_size() const { return _ydim; }
-        uint z_size() const { return _zdim; }
 
         void shape(uint* shapes) const {
             shapes[0] = _xdim;
@@ -60,34 +56,31 @@ namespace tensor {
                 if (_data[i] != -1) sum += _data[i];
             }
             return sum;
-        }     
+        }
 
         template<typename U>
-        friend std::ostream& operator<<(std::ostream& stream, const Tensor<U>& object);
-    };
-
-    template<typename U>
-    std::ostream& operator<<(std::ostream& stream, const Tensor<U>& object) {
-        stream << '[';
-        for (int i = 0; i < object._zdim; i++) {
-            if (i > 0) stream << ' ';
+        friend std::ostream& operator<<(std::ostream& stream, const Tensor<U>& object) {
             stream << '[';
-            for (int j = 0; j < object._xdim; j++) {
-                if (j > 0) stream << "  ";
+            for (int i = 0; i < object._zdim; i++) {
+                if (i > 0) stream << ' ';
                 stream << '[';
-                for (int k = 0; k < object._ydim; k++) {
-                    stream << object(j, k, i);
-                    if (k < object._ydim - 1) stream << ' ';
+                for (int j = 0; j < object._xdim; j++) {
+                    if (j > 0) stream << "  ";
+                    stream << '[';
+                    for (int k = 0; k < object._ydim; k++) {
+                        stream << object(j, k, i);
+                        if (k < object._ydim - 1) stream << ' ';
+                    }
+                    stream << ']';
+                    if (j < object._xdim - 1) stream << std::endl;
                 }
                 stream << ']';
-                if (j < object._xdim - 1) stream << std::endl;
+                if (i < object._zdim - 1) stream << std::endl;
             }
-            stream << ']';
-            if (i < object._zdim - 1) stream << std::endl;
+            stream << "] Tensor [" << object._xdim << ',' << object._ydim << ',' << object._zdim << ']';
+            return stream;
         }
-        stream << "] Tensor [" << object._xdim << ',' << object._ydim << ',' << object._zdim << ']';
-        return stream;
-    }
+    };
 
 }
 
