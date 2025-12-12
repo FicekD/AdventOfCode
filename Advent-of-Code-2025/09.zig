@@ -38,7 +38,7 @@ pub fn part1(points: []Point) !void {
 
     for (0.., points[0 .. points.len - 1]) |i, p1| {
         for (points[i..]) |p2| {
-            const area = @abs(p1.x - p2.x + 1) * @abs(p1.y - p2.y + 1);
+            const area = (@abs(p1.x - p2.x) + 1) * (@abs(p1.y - p2.y) + 1);
 
             if (area > max_area) {
                 max_area = area;
